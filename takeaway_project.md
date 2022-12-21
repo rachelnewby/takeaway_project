@@ -92,9 +92,9 @@ I would like to receive a text such as "Thank you! Your order was placed and wil
 │ name             │                     │  initialized with       │                                │ time of the order       │
 │ phone number     ├────────────────────►│     profile instance    │                                │ placed(?)               │
 │ delivery address │                     │  items selected         │                                │ takes a order instance  │
-├──────────────────┤     Order will be   ├─────────────────────────┤                                │ via name and order no   │
-│ returns name     │     initialized     │ order number =>         ├──────────────────────────────► │                         │
-│ returns phone num│     with a profile  │ generates order num     │    Order text will access      ├─────────────────────────┤
+├──────────────────┤     Order will be   ├─────────────────────────┤                                │                         │
+│ returns name     │     initialized     │                         ├──────────────────────────────► │                         │
+│ returns phone num│     with a profile  │                         │    Order text will access      ├─────────────────────────┤
 │                  │     instance        │                         │     time of order, name,       │                         │
 │                  │                     │ add => add items to     │     and order number           │ send => sends the text  │
 └──────────────────┘                     │  array of selected item │                                │  message                │
@@ -116,9 +116,12 @@ class Menu
     # ...Hash storing menu items 
   end
 
-  def view(diet)
+  def return_item(string) # string
+    # Will search for the item in the string in the menu and return the item and price as array [item, price]
+  end
+
+  def view
     # Returns menu list formatted as item with prices on each line, prepended by '*'
-    #COULD DO THIS AS A FILTER - VEGETARIAN, VEGAN, MEAN OR FISH - and have a hash of hashes? KEY COULD BE A NUMBER OF THE DISH?
   end
 end
 
@@ -152,10 +155,16 @@ class Order
   end
 
   def verify 
-    # Confirms order placed - runs OrderText
     # Returns items ordered with total price
   end
 
+  def confirmed?
+    # Confirms the order
+    # Runs time method to find out the time confirmed
+    # Returns a boolean value
+  end
+
+private 
   def time
     # Returns the time that the order was placed
   end
@@ -167,8 +176,15 @@ class OrderText
   end
 
   def send
+    # If order is confirmed...
     # Sends text to customer via Twilio
   end
+
+private 
+  def make_request_to_api
+
+  end
+
 end
 ```
 
@@ -180,7 +196,25 @@ combinations that reflect the ways in which the system will be used._
 ```ruby
 # EXAMPLE
 
-# 
+# Verifies what a customer has ordered
+menu = Menu.new
+customer = Profile.new("rachel", "07123456789", "3 House lane")
+order = Order.new(customer)
+order.add('pepperoni')
+order.add('margarita')
+expect(order.verify).to eq "Margarita x 1, Pepperoni x 1. Total: £21.50"
+
+
+# Once order is confirmed text message sent 
+menu = Menu.new
+customer = Profile.new("rachel", "07123456789", "3 House lane")
+order = Order.new(menu, customer)
+order.add('pepperoni')
+order.add('margarita')
+order.confirmed?
+text = OrderText.new(order)
+expect(text.send).to eq "" #Not sure how to write this yet! 
+
 
 
 # Gets all tracks
