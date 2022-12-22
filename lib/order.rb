@@ -12,7 +12,6 @@ class Order
   def add(item)
     return "Error: #{item} not an option" if @menu.return_item(item) == nil  
     @ordered_items << @menu.return_item(item) 
-    OrderText.send
   end
 
   def verify
@@ -24,8 +23,8 @@ class Order
 
   def confirmed
     @confirmed = true
-    #Here we will initialize the order_text class
-    #return self.order_expected_time
+    text = OrderText.new(self, @customer)
+    text.send
   end
 
   private
