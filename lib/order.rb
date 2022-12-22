@@ -42,7 +42,6 @@ class Order
     @ordered_items.flatten.each { |item| all_numbers << item[1..-1].to_f if item[0] == "£" }
     price_total = all_numbers.inject(:+)
   end
-
 end 
 
 
