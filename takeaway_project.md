@@ -158,7 +158,7 @@ class Order
     # Returns items ordered with total price
   end
 
-  def confirmed?
+  def confirmed
     # Confirms the order
     # Runs time method to find out the time confirmed
     # Returns a boolean value
@@ -211,7 +211,7 @@ customer = Profile.new("rachel", "07123456789", "3 House lane")
 order = Order.new(menu, customer)
 order.add('pepperoni')
 order.add('margarita')
-order.confirmed?
+order.confirmed
 text = OrderText.new(order)
 expect(text.send).to eq "" #Not sure how to write this yet! 
 
