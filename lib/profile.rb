@@ -4,4 +4,16 @@ class Profile
     @number = number
     @address = address
   end
+
+  def name
+    return @name.capitalize
+  end
+
+  def number
+    return @number
+  end
+
+  def address
+    return @address
+  end
 end

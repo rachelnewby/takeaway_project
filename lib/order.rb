@@ -12,6 +12,7 @@ class Order
   def add(item)
     return "Error: #{item} not an option" if @menu.return_item(item) == nil  
     @ordered_items << @menu.return_item(item) 
+    OrderText.send
   end
 
   def verify
@@ -21,7 +22,7 @@ class Order
     return "#{item_totals}. Total: £#{price_total}0"
   end
 
-  def confirmed_with_time
+  def confirmed
     @confirmed = true
     #Here we will initialize the order_text class
     #return self.order_expected_time
@@ -43,11 +44,6 @@ class Order
     price_total = all_numbers.inject(:+)
   end
 
-  # def order_expected_time - maybe move to the order text 
-  #   time = Time.new
-  #   order_expected_time = time + 1800
-  #   formatted_time = order_expected_time.strftime("%a %d %b, %Y %H:%M")
-  # end
 end 
 
 
