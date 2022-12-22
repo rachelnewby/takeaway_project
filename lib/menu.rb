@@ -10,8 +10,9 @@ class Menu
   ]
   end
 
-  def return_item(string) 
+  def return_item(string)
     @menu_items.each { |item| return [item[:item], item[:price]] if item[:item] == string.downcase }
+    @menu_items.detect { |hash| hash.has_value? string }
   end
 
   def view
@@ -20,3 +21,4 @@ class Menu
     return formatted_items
   end
 end
+

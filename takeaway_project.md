@@ -217,13 +217,7 @@ expect(text.send).to eq "" #Not sure how to write this yet!
 
 
 
-# Gets all tracks
-library = MusicLibrary.new
-track_1 = Track.new("Carte Blanche", "Veracocha")
-track_2 = Track.new("Synaesthesia", "The Thrillseekers")
-library.add(track_1)
-library.add(track_2)
-library.all # => [track_1, track_2]
+
 ```
 
 ## 4. Create Examples as Unit Tests
