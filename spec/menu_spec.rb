@@ -12,7 +12,14 @@ describe Menu do
     menu = Menu.new
     expect(menu.return_item('margarita')).to eq ["margarita", "£9.50"]
   end
-  
+
+  context "If an item passed to #return_item isn't on the menu" do
+    it "#return_item will return nil" do
+      menu = Menu.new
+      expect(menu.return_item('pork')).to eq nil
+    end
+  end
+
   it "#view formats the menu and returns it for customers to read" do
     menu = Menu.new
     expect(menu.view).to eq [
