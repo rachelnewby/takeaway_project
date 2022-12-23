@@ -155,34 +155,37 @@ class Order
   end
 
   def verify 
-    # Returns items ordered with total price
+    # Returns items ordered with total price using item_totals and price_totals methods
   end
 
   def confirmed
     # Confirms the order
-    # Runs time method to find out the time confirmed
-    # Returns a boolean value
+    # Initilizes OrderText class and calls the send method on it
   end
 
 private 
-  def time
-    # Returns the time that the order was placed
+  def item_totals 
+    # Counts the number of times each item in an order appears 
+    # Returns the items in the order in a formatted way 
   end
+
+  def price_totals
+  #Calculates the total price of the order
+  #Returns the total price
 end
 
 class OrderText
-  def initialize(order) #order is an instance of Order
+  def initialize(order, customer) #order is an instance of Order / customer is an instance of Profile 
     #...
   end
 
   def send
-    # If order is confirmed...
     # Sends text to customer via Twilio
   end
 
 private 
-  def make_request_to_api
-
+  def order_expected_time
+    #Returns the time now plus 30 minutes
   end
 
 end
@@ -199,11 +202,45 @@ combinations that reflect the ways in which the system will be used._
 # Verifies what a customer has ordered
 menu = Menu.new
 customer = Profile.new("rachel", "07123456789", "3 House lane")
-order = Order.new(customer)
+order = Order.new(menu, customer)
 order.add('pepperoni')
 order.add('margarita')
-expect(order.verify).to eq "Margarita x 1, Pepperoni x 1. Total: £21.50"
+order.verify => "Margarita x 1, Pepperoni x 1. Total: £21.50"
 
+# Verify will return multiple items together 
+menu = Menu.new
+customer = customer = Profile.new("rachel", ENV["mobile"], "3 House lane")
+order = Order.new(menu, customer)
+order.add('pepperoni')
+order.add('margarita')
+order.add('margarita')
+order.verify => "Pepperoni x 1, Margarita x 2. Total: £31.00"
+
+# When an 'add'ed item isn't an option 
+menu = Menu.new
+customer = customer = Profile.new("rachel", ENV["mobile"], "3 House lane")
+order = Order.new(menu, customer)
+order.add('pork') => "Error: pork not an option"
+
+# When an 'add'ed item isn't an option but other items were valid: #verify will still work on valid items
+menu = Menu.new
+customer = customer = Profile.new("rachel", ENV["mobile"], "3 House lane")
+order = Order.new(menu, customer)
+order.add('pepperoni')
+expect(order.add('pork')).to eq "Error: pork not an option"
+order.verify => "Pepperoni x 1. Total: £12.00"
+
+# When #verify is called but nothing has been added to order
+menu = Menu.new
+customer = customer = Profile.new("rachel", ENV["mobile"], "3 House lane")
+order = Order.new(menu, customer)
+order.verify => "Error: nothing has been added to your order"
+
+# When #confirmed is called but nothing has been added to order
+menu = Menu.new
+customer = Profile.new("rachel", ENV["mobile"], "3 House lane")
+order = Order.new(menu, customer)
+expect{order.confirmed}.to raise_error "ERROR: There are no items in your order"
 
 # Once order is confirmed text message sent 
 menu = Menu.new
@@ -215,9 +252,6 @@ order.confirmed
 text = OrderText.new(order)
 expect(text.send).to eq "" #Not sure how to write this yet! 
 
-
-
-
 ```
 
 ## 4. Create Examples as Unit Tests
@@ -226,11 +260,93 @@ _Create examples, where appropriate, of the behaviour of each relevant class at
 a more granular level of detail._
 
 ```ruby
-# EXAMPLE
 
-# Constructs a track
-track = Track.new("Carte Blanche", "Veracocha")
-track.title # => "Carte Blanche"
+# MENU UNIT TEST
+
+# It constructs a new menu
+menu = Menu.new
+expect(menu).to be
+ 
+# It return_item when details of the item are passed a string argument
+menu = Menu.new
+menu.return_item('margarita') => ["margarita", "£9.50"]
+
+# It returns nil if string isn't on the menu       
+menu = Menu.new
+menu.return_item('pork') => nil
+
+# iew formats the menu and returns it for customer to read
+menu = Menu.new
+menu.view => [
+  "* margarita: £9.50",
+  "* pepperoni: £12.00", 
+  "* spicy beef: £13.50",
+  "* spinach & egg: £11.00",
+  "* ham & mushroom: £11.50",
+  "* meat muncher: £14.50"
+]
+
+# PROFILE UNIT TEST
+
+# It constructs a new Profile class      
+customer = Profile.new("rachel", "07123456789", "3 house lane")
+expect(customer).to be
+
+# It returns name 
+customer = Profile.new("rachel", "07123456789", "3 house lane")
+customer.name => "Rachel"
+
+# It returns number
+customer = Profile.new("rachel", "+4407123456789", "3 house lane")
+customer.number => "+4407123456789"
+
+# It returns address
+customer = Profile.new("rachel", "07123456789", "3 house lane")
+customer.address => "3 house lane"
+
+# It corrects the format of the number if the number inputted isn't compatable with Twilio
+customer = Profile.new("rachel", "07123456789", "3 house lane")
+customer.number => "+4407123456789"
+
+# ORDER UNIT TEST
+
+# It constructs an Order class
+menu = double :menu
+customer = double :profile
+order = Order.new(menu, customer)
+expect(order).to be
+
+# It verifies the order
+menu = double :menu
+customer = double :customer
+order = Order.new(menu, customer)
+allow(menu).to receive(:return_item).with('margarita').and_return(["margarita", "£9.50"])
+allow(menu).to receive(:return_item).with('margarita').and_return(["margarita", "£9.50"])
+allow(menu).to receive(:return_item).with('pepperoni').and_return(["pepperoni", "£12.00"])
+order.add('pepperoni')
+order.add('margarita')
+order.add('margarita')
+order.verify => "Pepperoni x 1, Margarita x 2. Total: £31.00"
+
+# When an item 'add'ed doesn't exist a message is displayed
+menu = double :menu
+customer = double :customer
+order = Order.new(menu, customer)
+allow(menu).to receive(:return_item).with('pork').and_return(nil)
+order.add('pork') => "Error: pork not an option"
+
+# When verify is called on an empty order
+menu = double :menu
+customer = double :customer
+order = Order.new(menu, customer)
+order.verify => "Error: nothing has been added to your order"
+
+# When confirmed is called on an empty order
+menu = double :menu
+customer = double :customer
+order = Order.new(menu, customer)
+order.confirmed => "ERROR: There are no items in your order"
+
 ```
 
 _Encode each example as a test. You can add to the above list as you go._
