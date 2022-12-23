@@ -67,7 +67,6 @@ describe "Integration" do
     order.add('pepperoni')
     order.add('margarita')
     order.add('margarita')
-    expect(order.verify).to eq "Pepperoni x 1, Margarita x 2. Total: £31.00"
     expect(order.confirmed).to eq "Something"
   end
 

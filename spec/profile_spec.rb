@@ -13,13 +13,20 @@ describe Profile do
     expect(customer.name).to eq "Rachel"
   end
 
-  it "#number returns name" do
-    customer = Profile.new("rachel", "07123456789", "3 house lane")
-    expect(customer.number).to eq "07123456789"
+  it "#number returns number" do
+    customer = Profile.new("rachel", "+4407123456789", "3 house lane")
+    expect(customer.number).to eq "+4407123456789"
   end
 
-  it "#number returns name" do
+  it "#address returns address" do
     customer = Profile.new("rachel", "07123456789", "3 house lane")
     expect(customer.address).to eq "3 house lane"
+  end
+
+  context "If the wrong format of number is entered" do 
+    it "#number will format the number and return it" do
+      customer = Profile.new("rachel", "07123456789", "3 house lane")
+      expect(customer.number).to eq "+4407123456789"
+    end
   end
 end

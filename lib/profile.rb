@@ -10,7 +10,11 @@ class Profile
   end
 
   def number
-    return @number
+    if @number[0..2] != "+44" && @number.length == 11
+      @number = "+44#{@number}"
+    else 
+      @number
+    end
   end
 
   def address
