@@ -22,6 +22,7 @@ class Order
   end
 
   def confirmed
+    fail "ERROR: There are no items in your order" if @ordered_items == []
     @confirmed = true
     text = OrderText.new(self, @customer)
     text.send

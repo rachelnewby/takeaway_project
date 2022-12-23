@@ -39,8 +39,15 @@ describe Order do
       order = Order.new(menu, customer)
       expect(order.verify).to eq "Error: nothing has been added to your order"
     end
+
+    it "#confirmed will throw an error" do
+      menu = double :menu
+      customer = double :customer
+      order = Order.new(menu, customer)
+      expect{order.confirmed}.to raise_error "ERROR: There are no items in your order"
+    end
   end
 end
 
-#Need a test to fail confirmed and verify if the ordered_items is empty
+
 #Need a test to double the time function so I can test that it will work (review what we did the other day - it was an example)
