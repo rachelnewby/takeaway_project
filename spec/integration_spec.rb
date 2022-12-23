@@ -51,9 +51,16 @@ describe "Integration" do
       order = Order.new(menu, customer)
       expect(order.verify).to eq "Error: nothing has been added to your order"
     end
+
+    it "#confirmed will throw an error" do
+      menu = Menu.new
+      customer = Profile.new("rachel", ENV["mobile"], "3 House lane")
+      order = Order.new(menu, customer)
+      expect{order.confirmed}.to raise_error "ERROR: There are no items in your order"
+    end
   end
 
-  it "will #verify the order" do
+  xit "will #verify the order" do
     menu = Menu.new
     customer = customer = Profile.new("rachel", ENV["mobile"], "3 House lane")
     order = Order.new(menu, customer)
