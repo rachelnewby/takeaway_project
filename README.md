@@ -1,15 +1,19 @@
-# takeaway_project
+# Take Away Project
 
-This app is a takeaway ordering service. It enables users to see what is available to choose from; add items to their order, see their order and total, confirm their order; and receive a personalised text to let users know when to expect their order. 
+This app is a takeaway ordering service. It enables users to see what food is available to choose from, add items to their order, see their order and total, confirm their order, and receive a personalised text to let users know when to expect their order. <br>
 
-## Getting started
+This project is a multi-class system that was built in Ruby. This is a REPL program and has no user interface element.
 
-* This project was built in Ruby
-* git clone https://github.com/rachelnewby/takeaway_project.git'
-* Twilio gem required
-* Date required
-* Active Support required
+## Requirements and dependencies
+Start by cloning this repository. You will require the following:
+```
+date required
+Twilio gem required
+```
 
 ## Running tests
 
-* Rspec tests 
+This project uses the RSpec testing suite. 
+
+### Points to note
+There is no testing for the Twilio gem. 
